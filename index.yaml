@@ -1,0 +1,62 @@
+apiVersion: v1
+entries:
+  bootbase-wordpress:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2022-01-26T13:32:26.988495+01:00"
+    dependencies:
+    - name: wordpress
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.3.3
+    description: A helm chart to deploy Wordpress in the Bootbase Compute cluster
+      - based on Bitnami Wordpress
+    digest: 8a14364efcba62aa7d81795914db1bbb77e0199ad3da7a01408800ddf1d7a07c
+    home: https://www.bootbase.be
+    name: bootbase-wordpress
+    type: application
+    urls:
+    - bootbase-wordpress-0.1.0.tgz
+    version: 0.1.0
+  wordpress:
+  - annotations:
+      category: CMS
+    apiVersion: v2
+    appVersion: 5.8.3
+    created: "2022-01-26T13:32:27.001477+01:00"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    - condition: memcached.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 5.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 1.x.x
+    description: Web publishing platform for building blogs and websites.
+    digest: 96fe2a166e8b72ced08666f2274923d2c6ab21d9184896c9a4e2a7c914912eb6
+    home: https://github.com/bitnami/charts/tree/master/bitnami/wordpress
+    icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
+    keywords:
+    - application
+    - blog
+    - cms
+    - http
+    - php
+    - web
+    - wordpress
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    name: wordpress
+    sources:
+    - https://github.com/bitnami/bitnami-docker-wordpress
+    - https://wordpress.org/
+    urls:
+    - charts/wordpress-12.3.3.tgz
+    version: 12.3.3
+generated: "2022-01-26T13:32:26.971219+01:00"
