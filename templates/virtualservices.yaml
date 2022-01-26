@@ -1,0 +1,42 @@
+{{- if .Values.routing.enabled }}
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "bootbase-wordpress.fullname" . }}
+  labels:
+    {{- if .Values.wordpress.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.wordpress.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.wordpress.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.wordpress.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  hosts:
+    - {{ .Values.routing.domain }}
+    - www.{{ .Values.routing.domain }}
+  gateways:
+    - istio-system/default-gateway
+    - istio-system/{{ include "bootbase-wordpress.fullname" . }}-gateway
+  http:
+    {{- if .Values.routing.redirectToWww }}
+    - match:
+        - authority:
+            exact: {{ .Values.routing.domain }}
+      redirect:
+        authority: www.{{ .Values.routing.domain }}
+    {{- end }}
+    {{- if .Values.routing.redirectToNonWww }}
+    - match:
+        - authority:
+            exact: www.{{ .Values.routing.domain }}
+      redirect:
+        authority: {{ .Values.routing.domain }}
+    {{- end }}
+    - route:
+        - destination:
+            host: {{ .Release.Name }}-wordpress
+            port:
+              number: {{ .Values.wordpress.service.port }}
+
+{{- end }}

@@ -1,0 +1,68 @@
+# Default values for bootbase-wordpress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+# Values for bitnami/wordpress
+
+routing:
+  enabled: true
+  redirectToWww: true
+  redirectToNonWww: false
+  domain: ""
+
+wordpress:
+  commonLabels:
+    bootbase.be/app: wordpress
+    bootbase.be/tier: web
+  storageClass: csi-cinder-high-speed
+  volumePermissions:
+    enabled: true
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  mariadb:
+    commonLabels:
+      bootbase.be/app: mariadb
+      bootbase.be/tier: database
+    volumePermissions:
+      enabled: true # Needed for OVH volumes
+    enabled: true
+    architecture: standalone
+    auth:
+      rootPassword: ""
+
+  wordpressScheme: https
+  wordpressSkipInstall: false
+  wordpressExtraConfigContent: |
+    # Make sure to sync with php.ini
+    define('WP_UPLOAD_MAX_FILESIZE', '8192M');
+    define('WP_POST_MAX_SIZE', '8192M');
+    define('WP_MEMORY_LIMIT', '512M');
+    define('WP_MAX_EXECUTION_TIME', '900');
+    define('WP_MAX_INPUT_TIME', '900');
+
+  uploadMaxFilesize: 8192M
+  postMaxSize: 8192M
+  memoryLimit: 512M
+  maxExecutionTime: 900
+  maxInputTime: 900
+
+  wordpressConfigureCache: true
+  memcached:
+    enabled: false
+
+  wordpressAutoUpdateLevel: minor
+  wordpressPlugins: none
+  allowEmptyPassword: false
+  extraVolumes:
+    - name: wordpress-php
+      configMap:
+        name: wordpress-php-config
+  extraVolumeMounts:
+    - name: wordpress-php
+      mountPath: /opt/bitnami/php/etc/php.ini
+      subPath: php.ini
