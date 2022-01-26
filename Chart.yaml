@@ -9,3 +9,5 @@ dependencies:
   - name: wordpress
     version: 12.3.3
     repository: https://charts.bitnami.com/bitnami
+sources:
+  - https://gitlab.com/bootbase/helm-charts/bootbase-wordpress
